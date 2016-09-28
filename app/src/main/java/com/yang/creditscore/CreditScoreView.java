@@ -26,7 +26,7 @@ public class CreditScoreView extends View {
     //中心Y坐标
     private int centerY;
     //各维度标题
-    private String[] titles = {"A", "B", "C", "D", "E"};
+    private String[] titles = {"履约能力", "信用历史", "人脉关系", "行为偏好", "身份特质"};
     //各维度分值
     private float[] data = {100, 80, 60, 40, 60};
     //数据最大值
@@ -36,7 +36,7 @@ public class CreditScoreView extends View {
     //数据区画笔
     private Paint valuePaint;
     //标题画笔
-    private Paint textPaint;
+    private Paint titlePaint;
 
     public CreditScoreView(Context context) {
         this(context, null);
@@ -63,16 +63,16 @@ public class CreditScoreView extends View {
         valuePaint.setAlpha(120);
         valuePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        textPaint = new Paint();
+        titlePaint = new Paint();
         valuePaint.setAntiAlias(true);
-        textPaint.setTextSize(20);
-        textPaint.setColor(Color.WHITE);
-        textPaint.setStyle(Paint.Style.FILL);
+        titlePaint.setTextSize(25);
+        titlePaint.setColor(Color.WHITE);
+        titlePaint.setStyle(Paint.Style.FILL);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        radius = Math.min(h, w) / 2 * 0.9f;
+        radius = Math.min(h, w) / 2 * 0.5f;
         //中心坐标
         centerX = w / 2;
         centerY = h / 2;
@@ -86,6 +86,7 @@ public class CreditScoreView extends View {
         drawPolygon(canvas);
         drawLines(canvas);
         drawRegion(canvas);
+        drawTitle(canvas);
     }
 
     /**
@@ -95,9 +96,9 @@ public class CreditScoreView extends View {
         Path path = new Path();
         for (int i = 0; i < count; i++) {
             if (i == 0) {
-                path.moveTo(getPoint(i, 1).x, getPoint(i, 1).y);
+                path.moveTo(getPoint(i).x, getPoint(i).y);
             } else {
-                path.lineTo(getPoint(i, 1).x, getPoint(i, 1).y);
+                path.lineTo(getPoint(i).x, getPoint(i).y);
             }
         }
 
@@ -111,7 +112,7 @@ public class CreditScoreView extends View {
         for (int i = 0; i < count; i++) {
             path.reset();
             path.moveTo(centerX, centerY);
-            path.lineTo(getPoint(i, 1).x, getPoint(i, 1).y);
+            path.lineTo(getPoint(i).x, getPoint(i).y);
             canvas.drawPath(path, mainPaint);
         }
     }
@@ -121,8 +122,8 @@ public class CreditScoreView extends View {
 
         for (int i = 0; i < count; i++) {
             float percent = data[i] / maxValue;
-            int x = getPoint(i, percent).x;
-            int y = getPoint(i, percent).y;
+            int x = getPoint(i, 0, percent).x;
+            int y = getPoint(i, 0, percent).y;
             if (i == 0) {
                 path.moveTo(x, y);
             } else {
@@ -138,29 +139,59 @@ public class CreditScoreView extends View {
         canvas.drawPath(path, valuePaint);
     }
 
-    private Point getPoint(int position, float percent) {
+    private void drawTitle(Canvas canvas) {
+        Paint.FontMetrics fontMetrics = titlePaint.getFontMetrics();
+        float fontHeight = fontMetrics.descent - fontMetrics.ascent;
+
+        for (int i = 0; i < count; i++) {
+            float x = getPoint(i, fontHeight, 1).x;
+            float y = getPoint(i, fontHeight, 1).y;
+
+            if (radian * i >= 0 && radian * i <= Math.PI / 2) { //第4象限
+                canvas.drawText(titles[i], x, y, titlePaint);
+
+            } else if (radian * i >= 3 * Math.PI / 2 && radian * i <= Math.PI * 2) { //第3象限
+                canvas.drawText(titles[i], x, y, titlePaint);
+
+            } else if (radian * i > Math.PI / 2 && radian * i <= Math.PI) { //第2象限
+                //文本长度
+                float dis = titlePaint.measureText(titles[i]);
+                canvas.drawText(titles[i], x - dis, y, titlePaint);
+
+            } else if (radian * i >= Math.PI && radian * i < 3 * Math.PI / 2) { //第1象限
+                float dis = titlePaint.measureText(titles[i]);
+                canvas.drawText(titles[i], x - dis, y, titlePaint);
+            }
+        }
+    }
+
+    private Point getPoint(int position) {
+        return getPoint(position, 0, 1);
+    }
+
+    private Point getPoint(int position, float fontHeight, float percent) {
         int x = 0;
         int y = 0;
 
         if (position == 0) {
-            x = (int) (centerX + radius * Math.sin(radian) * percent);
-            y = (int) (centerY - radius * Math.cos(radian) * percent);
+            x = (int) (centerX + (radius + fontHeight) * Math.sin(radian) * percent);
+            y = (int) (centerY - (radius + fontHeight) * Math.cos(radian) * percent);
 
         } else if (position == 1) {
-            x = (int) (centerX + radius * Math.sin(radian / 2) * percent);
-            y = (int) (centerY + radius * Math.cos(radian / 2) * percent);
+            x = (int) (centerX + (radius + fontHeight) * Math.sin(radian / 2) * percent);
+            y = (int) (centerY + (radius + fontHeight) * Math.cos(radian / 2) * percent);
 
         } else if (position == 2) {
-            x = (int) (centerX - radius * Math.sin(radian / 2) * percent);
-            y = (int) (centerY + radius * Math.cos(radian / 2) * percent);
+            x = (int) (centerX - (radius + fontHeight) * Math.sin(radian / 2) * percent);
+            y = (int) (centerY + (radius + fontHeight) * Math.cos(radian / 2) * percent);
 
         } else if (position == 3) {
-            x = (int) (centerX - radius * Math.sin(radian) * percent);
-            y = (int) (centerY - radius * Math.cos(radian) * percent);
+            x = (int) (centerX - (radius + fontHeight) * Math.sin(radian) * percent);
+            y = (int) (centerY - (radius + fontHeight) * Math.cos(radian) * percent);
 
         } else if (position == 4) {
             x = centerX;
-            y = (int) (centerY - radius * percent);
+            y = (int) (centerY - (radius + fontHeight) * percent);
         }
 
         return new Point(x, y);
