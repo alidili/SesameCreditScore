@@ -97,6 +97,7 @@ public class CreditScoreView extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        //雷达图半径
         radius = Math.min(h, w) / 2 * 0.5f;
         //中心坐标
         centerX = w / 2;
@@ -160,6 +161,7 @@ public class CreditScoreView extends View {
         Path path = new Path();
 
         for (int i = 0; i < dataCount; i++) {
+            //计算百分比
             float percent = data[i] / maxValue;
             int x = getPoint(i, 0, percent).x;
             int y = getPoint(i, 0, percent).y;
@@ -169,8 +171,10 @@ public class CreditScoreView extends View {
                 path.lineTo(x, y);
             }
         }
-        valuePaint.setStyle(Paint.Style.STROKE);
+
+        //绘制填充区域的边界
         path.close();
+        valuePaint.setStyle(Paint.Style.STROKE);
         canvas.drawPath(path, valuePaint);
 
         //绘制填充区域
@@ -185,6 +189,7 @@ public class CreditScoreView extends View {
      */
     private void drawScore(Canvas canvas) {
         int score = 0;
+        //计算总分
         for (int i = 0; i < dataCount; i++) {
             score += data[i];
         }
@@ -205,6 +210,7 @@ public class CreditScoreView extends View {
             int iconHeight = bitmap.getHeight();
             float titleWidth = titlePaint.measureText(titles[i]);
 
+            //底下两个角的坐标需要向下移动半个图片的位置（1、2）
             if (i == 1) {
                 y += (iconHeight / 2);
             } else if (i == 2) {
@@ -234,6 +240,8 @@ public class CreditScoreView extends View {
             int iconHeight = bitmap.getHeight();
             float titleWidth = titlePaint.measureText(titles[i]);
 
+            //上面获取到的x、y坐标是标题左下角的坐标
+            //需要将图标移动到标题上方居中位置
             if (i == 0) {
                 x += (titleWidth - iconWidth) / 2;
                 y -= (iconHeight + getTextHeight(titlePaint));
@@ -255,10 +263,24 @@ public class CreditScoreView extends View {
         }
     }
 
+    /**
+     * 获取雷达图上各个点的坐标
+     *
+     * @param position 坐标位置（右上角为0，顺时针递增）
+     * @return 坐标
+     */
     private Point getPoint(int position) {
         return getPoint(position, 0, 1);
     }
 
+    /**
+     * 获取雷达图上各个点的坐标（包括维度标题与图标的坐标）
+     *
+     * @param position    坐标位置
+     * @param radarMargin 雷达图与维度标题的间距
+     * @param percent     覆盖区的的百分比
+     * @return 坐标
+     */
     private Point getPoint(int position, int radarMargin, float percent) {
         int x = 0;
         int y = 0;
@@ -287,6 +309,12 @@ public class CreditScoreView extends View {
         return new Point(x, y);
     }
 
+    /**
+     * 获取文本的高度
+     *
+     * @param paint 文本绘制的画笔
+     * @return 文本高度
+     */
     private int getTextHeight(Paint paint) {
         Paint.FontMetrics fontMetrics = paint.getFontMetrics();
         return (int) (fontMetrics.descent - fontMetrics.ascent);
