@@ -33,19 +33,23 @@ public class CreditScoreView extends View {
     private int[] icons = {R.mipmap.ic_performance, R.mipmap.ic_history, R.mipmap.ic_contacts,
             R.mipmap.ic_predilection, R.mipmap.ic_identity};
     //各维度分值
-    private float[] data = {1000, 800, 600, 400, 600};
+    private float[] data = {170, 180, 160, 170, 180};
     //数据最大值
-    private float maxValue = 1000;
+    private float maxValue = 190;
     //雷达图与标题的间距
     private int radarMargin = DensityUtils.dp2px(getContext(), 15);
     //雷达区画笔
     private Paint mainPaint;
     //数据区画笔
     private Paint valuePaint;
+    //分数画笔
+    private Paint scorePaint;
     //标题画笔
     private Paint titlePaint;
     //图标画笔
     private Paint iconPaint;
+    //分数大小
+    private int scoreSize = DensityUtils.dp2px(getContext(), 28);
     //标题文字大小
     private int titleSize = DensityUtils.dp2px(getContext(), 13);
 
@@ -74,6 +78,13 @@ public class CreditScoreView extends View {
         valuePaint.setAlpha(120);
         valuePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
+        scorePaint = new Paint();
+        scorePaint.setAntiAlias(true);
+        scorePaint.setTextSize(scoreSize);
+        scorePaint.setColor(Color.WHITE);
+        scorePaint.setTextAlign(Paint.Align.CENTER);
+        scorePaint.setStyle(Paint.Style.FILL);
+
         titlePaint = new Paint();
         titlePaint.setAntiAlias(true);
         titlePaint.setTextSize(titleSize);
@@ -100,6 +111,7 @@ public class CreditScoreView extends View {
         drawPolygon(canvas);
         drawLines(canvas);
         drawRegion(canvas);
+        drawScore(canvas);
         drawTitle(canvas);
         drawIcon(canvas);
     }
@@ -167,6 +179,19 @@ public class CreditScoreView extends View {
     }
 
     /**
+     * 绘制分数
+     *
+     * @param canvas 画布
+     */
+    private void drawScore(Canvas canvas) {
+        int score = 0;
+        for (int i = 0; i < dataCount; i++) {
+            score += data[i];
+        }
+        canvas.drawText(score + "", centerX, centerY + scoreSize / 2, scorePaint);
+    }
+
+    /**
      * 绘制标题
      *
      * @param canvas 画布
@@ -211,19 +236,19 @@ public class CreditScoreView extends View {
 
             if (i == 0) {
                 x += (titleWidth - iconWidth) / 2;
-                y -= (iconHeight + getTitleHeight());
+                y -= (iconHeight + getTextHeight(titlePaint));
             } else if (i == 1) {
                 x += (titleWidth - iconWidth) / 2;
-                y -= (iconHeight / 2 + getTitleHeight());
+                y -= (iconHeight / 2 + getTextHeight(titlePaint));
             } else if (i == 2) {
                 x -= (iconWidth + (titleWidth - iconWidth) / 2);
-                y -= (iconHeight / 2 + getTitleHeight());
+                y -= (iconHeight / 2 + getTextHeight(titlePaint));
             } else if (i == 3) {
                 x -= (iconWidth + (titleWidth - iconWidth) / 2);
-                y -= (iconHeight + getTitleHeight());
+                y -= (iconHeight + getTextHeight(titlePaint));
             } else if (i == 4) {
                 x -= iconWidth / 2;
-                y -= (iconHeight + getTitleHeight());
+                y -= (iconHeight + getTextHeight(titlePaint));
             }
 
             canvas.drawBitmap(bitmap, x, y, titlePaint);
@@ -234,7 +259,7 @@ public class CreditScoreView extends View {
         return getPoint(position, 0, 1);
     }
 
-    private Point getPoint(int position, float radarMargin, float percent) {
+    private Point getPoint(int position, int radarMargin, float percent) {
         int x = 0;
         int y = 0;
 
@@ -262,8 +287,8 @@ public class CreditScoreView extends View {
         return new Point(x, y);
     }
 
-    private int getTitleHeight() {
-        Paint.FontMetrics fontMetrics = titlePaint.getFontMetrics();
+    private int getTextHeight(Paint paint) {
+        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
         return (int) (fontMetrics.descent - fontMetrics.ascent);
     }
 }
