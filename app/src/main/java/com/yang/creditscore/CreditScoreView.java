@@ -69,6 +69,7 @@ public class CreditScoreView extends View {
     private void init() {
         mainPaint = new Paint();
         mainPaint.setAntiAlias(true);
+        mainPaint.setStrokeWidth(0.3f);
         mainPaint.setColor(Color.WHITE);
         mainPaint.setStyle(Paint.Style.STROKE);
 
