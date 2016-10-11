@@ -324,9 +324,11 @@ OK，到这里主要的绘制工作就完成了，图标是在[>戳这里<](http
 
 # **4.写在最后** #
 
-还没有做适配，以后会慢慢加上的，源码已托管到GitHub上，欢迎Fork，觉得还不错就Start一下吧！
+还没有做适配，以后会慢慢加上的，欢迎Fork，觉得还不错就Start一下吧！
 
-GitHub地址：https://github.com/alidili/SesameCreditScore
+博客地址：http://blog.csdn.net/kong_gu_you_lan/article/details/52702211
+
+欢迎同学们吐槽评论，如果你觉得本篇博客对你有用，那么就留个言或者顶一下吧(＾－＾)
 
 感谢：
 http://blog.csdn.net/u013831257/article/details/50784565
