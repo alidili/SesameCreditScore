@@ -326,7 +326,7 @@ OK，到这里主要的绘制工作就完成了，图标是在[>戳这里<](http
 
 还没有做适配，以后会慢慢加上的，欢迎Fork，觉得还不错就Start一下吧！
 
-博客地址：http://blog.csdn.net/kong_gu_you_lan/article/details/52702211
+博客地址：http://blog.csdn.net/kong_gu_you_lan/article/details/52904064
 
 欢迎同学们吐槽评论，如果你觉得本篇博客对你有用，那么就留个言或者顶一下吧(＾－＾)
 
