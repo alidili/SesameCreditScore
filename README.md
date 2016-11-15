@@ -1,9 +1,11 @@
 # SesameCreditScore
 芝麻信用分雷达图
 
-效果图：
+## 效果图
 
 ![图标](http://img.blog.csdn.net/20160929173138886)
+
+## 博客地址
 
 [CSDN博客地址](http://blog.csdn.net/kong_gu_you_lan/article/details/52904064)
 
