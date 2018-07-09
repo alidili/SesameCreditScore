@@ -3,7 +3,7 @@
 
 ## 效果图
 
-![芝麻分](https://img-blog.csdn.net/20160929173138886)
+![芝麻分](https://upload-images.jianshu.io/upload_images/3270074-caba778ea3a5d5f6?imageMogr2/auto-orient/strip%7CimageView2/2/w/280)
 
 ## 博客地址
 
