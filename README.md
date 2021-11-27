@@ -11,6 +11,12 @@
 
 [简书地址](http://www.jianshu.com/p/293a1369a66e)
 
+## 公众号
+
+✨ **容华谢后Tech** ✨
+
+![容华谢后Tech](https://github.com/alidili/alidili/raw/master/resources/wx_qrcode.jpg)
+
 ## License
 
 ```
